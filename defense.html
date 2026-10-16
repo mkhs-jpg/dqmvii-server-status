@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>防衛戦 - DQMⅥ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Outfit:wght@200;300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#070912; --ink:#eceffa; --muted:#8d95b2;
+    --gold:#e3c07d; --gold-lt:#f7e3b8; --violet:#6b5cff; --cyan:#49d8d0;
+    --line:rgba(255,255,255,.10); --surface:rgba(255,255,255,.035);
+  }
+  * { box-sizing: border-box; }
+  body { font-family: 'Zen Kaku Gothic New', 'Outfit', system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 900px; margin: 0 auto; padding: 20px 16px 48px; background:var(--bg); color:var(--ink); }
+  h1 { font-size: 20px; margin-bottom: 4px; font-weight:700; }
+  a { color: var(--gold-lt); }
+  .updated { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+  .links { font-size: 13px; margin-bottom: 16px; color: var(--muted); }
+  .links a { color: var(--gold); text-decoration:none; }
+  .links a:hover { color: var(--gold-lt); text-decoration:underline; }
+  summary.section-toggle { cursor:pointer; font-size:15px; font-weight:700; margin:16px 0 10px; color: var(--ink); }
+  .notice { background:rgba(227,192,125,.08); border:1px solid rgba(227,192,125,.35); border-radius:12px; padding:10px 14px; font-size:13px; margin-bottom:16px; color: var(--ink); }
+  .tab-buttons { display:flex; gap:6px; overflow-x:auto; margin-bottom:16px; padding-bottom:4px; }
+  .tab-btn { flex-shrink:0; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer; font-size:13px; font-family:inherit; }
+  .tab-btn.active { background:var(--gold); border-color:var(--gold); color:#1a1506; font-weight:700; }
+  .controls { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; align-items:center; }
+  input[type=search] { padding:7px 12px; border:1px solid var(--line); border-radius:10px; font-size:13px; min-width:220px; font-family:inherit; background:var(--surface); color:var(--ink); }
+  input[type=search]::placeholder { color: var(--muted); }
+  input[type=search]:focus { outline:none; border-color:var(--gold); }
+  .badge { display:inline-flex; padding:2px 9px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid var(--gold); color:var(--gold-lt); }
+  .empty { color: var(--muted); }
+  .entry { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:10px 14px; margin-bottom:8px; }
+  .entry summary { cursor:pointer; font-size:14px; color:var(--ink); }
+  .entry-stats { font-size:13px; color:var(--muted); margin-top:8px; line-height:1.7; }
+  .boss-rotation { font-size:13px; margin:6px 0 0; padding-left:20px; }
+  .boss-rotation li { margin-bottom:2px; }
+  .guide-section { margin-bottom:18px; }
+  .guide-section h2 { font-size:15px; margin:0 0 8px; color:var(--ink); }
+  .guide-section h3 { font-size:13px; color:var(--muted); margin:12px 0 6px; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 500; }
+</style>
+</head>
+<body>
+  <h1>防衛戦</h1>
+  <p class="updated" id="updated">最終更新: 2026/10/16 21:00:59(攻略情報: DQMVI 1.00.61)</p>
+  <p class="links"><a href="index.html">配合表トップ</a> ＞ <a href="wiki.html">攻略Wiki</a> ＞ 防衛戦</p>
+  <div class="notice">
+    <p>「防衛戦の旗」を置いて右クリックで始まる、押し寄せる敵から旗を守りきるモードです(新ランクシステムのワールドのみ)。
+    旗から<strong>32マス以内</strong>が戦場になり、戦場にいる人が参加者になります。</p>
+    <ul>
+      <li>敵が旗の2マス以内に<strong>5秒</strong>居座ると旗を奪われて負けです。参加者が全員倒れても負けです。負けても旗は残るので再挑戦できます。</li>
+      <li>倒れた人・戦場から出た人・ログアウトした人は、その防衛戦には戻れません。</li>
+      <li>戦場にはブロックを置けず、水やマグマも流せません(防衛設備は置けます)。旗の32マス以内にチェストやモンスターポートがあると旗を置けません。</li>
+      <li>1回戦ったあと、同じ旗は約3分使えません。</li>
+    </ul>
+  </div>
+
+  <h2>ウェーブと敵の数</h2>
+  <p>各ランクとも5回のウェーブのあと、第6波で<strong>敵の大将</strong>(防衛戦専用ボス)が攻めてきます。
+  参加者が1人増えるごとに、各ウェーブの敵の数は+50%、同時に出てくる数は+4体(上限60体)になります。
+  ランク∞は大将の代わりに<strong>魔王(Lv99)が4体ずつ</strong>降りてきて、全員倒すと制覇です。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>旗ランク</th><th>ウェーブごとの敵の数(1人のとき)</th><th>同時出現数(1人)</th><th>特殊な敵の割合</th></tr></thead>
+    <tbody><tr><td>1</td><td>12 → 24 → 36 → 48 → 60(計180体)</td><td>10</td><td>破壊の10%</td></tr><tr><td>2</td><td>18 → 36 → 54 → 72 → 90(計270体)</td><td>13</td><td>破壊の10%</td></tr><tr><td>3</td><td>24 → 48 → 72 → 96 → 120(計360体)</td><td>16</td><td>破壊の15% / 宙を舞う10% / 射手の10%</td></tr><tr><td>4</td><td>30 → 60 → 90 → 120 → 150(計450体)</td><td>19</td><td>破壊の15% / 宙を舞う10% / 射手の10%</td></tr><tr><td>5</td><td>36 → 72 → 108 → 144 → 180(計540体)</td><td>22</td><td>破壊の15% / 宙を舞う10% / 射手の10% / 癒しの5%</td></tr><tr><td>6</td><td>42 → 84 → 126 → 168 → 210(計630体)</td><td>25</td><td>破壊の15% / 宙を舞う10% / 射手の10% / 癒しの5%</td></tr><tr><td>7</td><td>50 → 100 → 150 → 200 → 250(計750体)</td><td>28</td><td>破壊の20% / 宙を舞う15% / 射手の15% / 癒しの10%</td></tr><tr><td>8</td><td>60 → 120 → 180 → 240 → 300(計900体)</td><td>31</td><td>破壊の20% / 宙を舞う15% / 射手の15% / 癒しの10%</td></tr><tr><td>9</td><td>70 → 140 → 210 → 280 → 350(計1050体)</td><td>34</td><td>破壊の20% / 宙を舞う15% / 射手の15% / 癒しの10%</td></tr><tr><td>10</td><td>80 → 160 → 240 → 320 → 400(計1200体)</td><td>37</td><td>破壊の20% / 宙を舞う15% / 射手の15% / 癒しの10%</td></tr><tr><td>11</td><td>90 → 180 → 270 → 360 → 450(計1350体)</td><td>40</td><td>破壊の20% / 宙を舞う15% / 射手の15% / 癒しの10%</td></tr><tr><td>12</td><td>100 → 200 → 300 → 400 → 500(計1500体)</td><td>43</td><td>破壊の20% / 宙を舞う15% / 射手の15% / 癒しの10%</td></tr><tr><td>∞</td><td>150 → 300 → 450 → 600 → 750(計2250体)</td><td>60</td><td>破壊の20% / 宙を舞う15% / 射手の15% / 癒しの10%</td></tr></tbody>
+  </table></div>
+  <p class="monster-list">特殊な敵: 破壊の=ブロックや設備を壊して進む / 宙を舞う=空を飛ぶ / 射手の=遠くから撃つ / 癒しの=仲間を回復する。</p>
+
+  <h2>敵の大将(防衛戦専用ボス)</h2>
+  <ul><li>ランク1: <a href="bosses.html#boss-defense_boss_1">砦荒らし オーガジェネラル</a></li><li>ランク2: <a href="bosses.html#boss-defense_boss_2">八首の暴虐 ヤマタノカシラ</a></li><li>ランク3: <a href="bosses.html#boss-defense_boss_3">黄金の翼 ゴルドラグーン</a></li><li>ランク4: <a href="bosses.html#boss-defense_boss_4">鋼鉄の攻城兵器 メカバーン・シージ</a></li><li>ランク5: <a href="bosses.html#boss-defense_boss_5">破城の鉄巨人 クロボジークント</a></li><li>ランク6: <a href="bosses.html#boss-defense_boss_6">城門砕き ガルマッゾロード</a></li><li>ランク7: <a href="bosses.html#boss-defense_boss_7">土地を喰らう者 ゾ・エーグドミナス</a></li></ul>
+  <p>行動パターンは<a href="bosses.html">ボス攻略</a>を見てください。</p>
+
+  <h2>お題とごほうび</h2>
+  <p>ウェーブごとに「お題」が1つ出ます。達成したお題1つにつき、勝利時のごほうびが<strong>+20%</strong>されます。</p>
+  <ul><li><strong>旗を触らせるな</strong>: 旗に敵を1体も取りつかせない</li><li><strong>設備を守れ</strong>: 防衛ブロックを1つも壊させない</li><li><strong>無傷で切り抜けろ</strong>: 参加者が1回もダメージを受けない</li><li><strong>全員生還</strong>: 誰も倒れない</li><li><strong>速攻</strong>: 決められた時間内に全滅させる</li></ul>
+  <p>勝利すると、次の3つから1つを選んでもらえます(旗ランクをRとします)。</p>
+  <ul>
+    <li><strong>土地の格上げ</strong>: 「バイオームランクR→R+1」のアイテム5個(ランク7の旗なら代わりに「防衛戦の旗 ランク∞」1本)</li>
+    <li><strong>防衛ブロック</strong>: バリケード4R個・トゲ床2R個・やぐらR個・大砲(R÷2、最低1)個</li>
+    <li><strong>宝箱</strong>: 足元に紫か金の宝箱が1つ(お題を3つ以上達成なら金)。中身は旗ランクに応じたもの</li>
+  </ul>
+  <p>勝利すると旗は「勝利の旗」になり、挑戦回数・最速クリア・勲章(全員生還・旗に触らせず・無傷)が記録されます。</p>
+
+  <h2>防衛設備</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>設備</th><th>効果</th><th>作り方(鍛冶)</th></tr></thead>
+    <tbody><tr><td>かがり火</td><td>まわり12マスの自分とペットの攻撃力と守備力を上げ続ける。 敵に殴られると壊れる(耐久40)。</td><td>-</td></tr><tr><td>祈りの像</td><td>まわり12マスの自分とペットを少しずつ回復し続ける。 敵に殴られると壊れる(耐久60)。</td><td>-</td></tr><tr><td>結界石</td><td>まわり8マスに入った敵を外へ押し返す。倒しはしない。 近づけない時間を作る道具。敵に殴られると壊れる(耐久80)。</td><td>-</td></tr><tr><td>やぐら</td><td>右クリックで前方10マスに矢の雨を降らせる。 威力は防衛戦の旗のランクが高いほど上がる(耐久80)。</td><td>-</td></tr><tr><td>大砲</td><td>右クリックで前方10マスへ弾を撃つ。着弾点のまわり1マスが壊れる。 威力は防衛戦の旗のランクが高いほど上がる(耐久60)。</td><td>-</td></tr><tr><td>バリケード</td><td>防衛戦で敵の足を止める壁。旗までの道をふさぐように置く。 敵に何度も殴られると壊れる(耐久60)。</td><td>-</td></tr><tr><td>トゲ床</td><td>上を通った敵を0.5秒おきに6ずつ削る、カーペットの薄さの床。 威力は防衛戦の旗のランクが高いほど上がる。踏まれ続けると壊れる(耐久30)。</td><td>-</td></tr><tr><td>おとりの太鼓</td><td>防衛戦の敵が、旗ではなく近くのこの太鼓を狙うようになる。 旗から離して置くほど時間を稼げる。壊されると効果が切れる(耐久120)。</td><td>-</td></tr></tbody>
+  </table></div>
+
+  <h2>防衛戦の旗</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>旗</th><th>入手方法</th></tr></thead>
+    <tbody><tr><td>防衛戦の旗 ランク∞</td><td>ランク7の旗で勝利した報酬「土地の格上げ」</td></tr><tr><td>防衛戦の旗 ランク1</td><td>鍛冶では作れない</td></tr><tr><td>防衛戦の旗 ランク2</td><td>鍛冶では作れない</td></tr><tr><td>防衛戦の旗 ランク3</td><td>鍛冶では作れない</td></tr><tr><td>防衛戦の旗 ランク4</td><td>鍛冶では作れない</td></tr><tr><td>防衛戦の旗 ランク5</td><td>鍛冶では作れない</td></tr><tr><td>防衛戦の旗 ランク6</td><td>鍛冶では作れない</td></tr><tr><td>防衛戦の旗 ランク7</td><td>鍛冶では作れない</td></tr><tr><td>防衛戦の旗 ランク8</td><td>鍛冶では作れない</td></tr><tr><td>防衛戦の旗 ランク9</td><td>鍛冶では作れない</td></tr><tr><td>防衛戦の旗 ランク10</td><td>鍛冶では作れない</td></tr><tr><td>防衛戦の旗 ランク11</td><td>鍛冶では作れない</td></tr><tr><td>防衛戦の旗 ランク12</td><td>鍛冶では作れない</td></tr></tbody>
+  </table></div>
+  <p class="monster-list">ウェーブ数・敵の割合・設備・旗・大将の一覧はMODから自動生成。ルールとごほうびの量はDQMVI-0.32.69で確認(DqmvDefenseBattle / DqmvDefenseReward)。</p>
+</body>
+</html>

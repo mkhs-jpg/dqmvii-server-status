@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>攻略Wiki - DQMⅥ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Outfit:wght@200;300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#070912; --ink:#eceffa; --muted:#8d95b2;
+    --gold:#e3c07d; --gold-lt:#f7e3b8; --violet:#6b5cff; --cyan:#49d8d0;
+    --line:rgba(255,255,255,.10); --surface:rgba(255,255,255,.035);
+  }
+  * { box-sizing: border-box; }
+  body { font-family: 'Zen Kaku Gothic New', 'Outfit', system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 900px; margin: 0 auto; padding: 20px 16px 48px; background:var(--bg); color:var(--ink); }
+  h1 { font-size: 20px; margin-bottom: 4px; font-weight:700; }
+  a { color: var(--gold-lt); }
+  .updated { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+  .links { font-size: 13px; margin-bottom: 16px; color: var(--muted); }
+  .links a { color: var(--gold); text-decoration:none; }
+  .links a:hover { color: var(--gold-lt); text-decoration:underline; }
+  summary.section-toggle { cursor:pointer; font-size:15px; font-weight:700; margin:16px 0 10px; color: var(--ink); }
+  .notice { background:rgba(227,192,125,.08); border:1px solid rgba(227,192,125,.35); border-radius:12px; padding:10px 14px; font-size:13px; margin-bottom:16px; color: var(--ink); }
+  .tab-buttons { display:flex; gap:6px; overflow-x:auto; margin-bottom:16px; padding-bottom:4px; }
+  .tab-btn { flex-shrink:0; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer; font-size:13px; font-family:inherit; }
+  .tab-btn.active { background:var(--gold); border-color:var(--gold); color:#1a1506; font-weight:700; }
+  .controls { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; align-items:center; }
+  input[type=search] { padding:7px 12px; border:1px solid var(--line); border-radius:10px; font-size:13px; min-width:220px; font-family:inherit; background:var(--surface); color:var(--ink); }
+  input[type=search]::placeholder { color: var(--muted); }
+  input[type=search]:focus { outline:none; border-color:var(--gold); }
+  .badge { display:inline-flex; padding:2px 9px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid var(--gold); color:var(--gold-lt); }
+  .empty { color: var(--muted); }
+  .entry { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:10px 14px; margin-bottom:8px; }
+  .entry summary { cursor:pointer; font-size:14px; color:var(--ink); }
+  .entry-stats { font-size:13px; color:var(--muted); margin-top:8px; line-height:1.7; }
+  .boss-rotation { font-size:13px; margin:6px 0 0; padding-left:20px; }
+  .boss-rotation li { margin-bottom:2px; }
+  .guide-section { margin-bottom:18px; }
+  .guide-section h2 { font-size:15px; margin:0 0 8px; color:var(--ink); }
+  .guide-section h3 { font-size:13px; color:var(--muted); margin:12px 0 6px; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 500; }
+
+  .wiki-hero { padding: 20px 0 12px; }
+  .wiki-hero .kicker { font-family:'Outfit',sans-serif; font-size:11px; letter-spacing:.3em; color:var(--gold); text-transform:uppercase; margin-bottom:12px; }
+  .wiki-hero h1 { font-size: clamp(26px, 5vw, 38px); font-weight:900; margin-bottom:12px; letter-spacing:.01em; }
+  .wiki-hero .lead { color: var(--muted); font-size: 14.5px; max-width: 42em; line-height:1.9; }
+  .wiki-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:22px; }
+  .wiki-card { display:block; padding:22px 20px; border-radius:18px; background:linear-gradient(170deg,rgba(255,255,255,.055),rgba(255,255,255,.018)); border:1px solid var(--line); transition:transform .2s,border-color .2s; }
+  .wiki-card:hover { transform:translateY(-4px); border-color:rgba(227,192,125,.4); }
+  .wiki-card-icon { font-size:26px; margin-bottom:10px; }
+  .wiki-card h3 { font-size:16px; font-weight:700; margin-bottom:6px; color: var(--ink); }
+  .wiki-card p { color:var(--muted); font-size:13px; line-height:1.7; margin-bottom:12px; }
+</style>
+</head>
+<body>
+  <div class="wiki-hero">
+    <p class="kicker">DQMⅥ ATTACK WIKI</p>
+    <h1>攻略Wiki</h1>
+    <p class="lead">モンスター図鑑・ボス攻略・職業スキルなど、攻略情報をまとめています。</p>
+  </div>
+  <p class="updated" id="updated"></p>
+  <p class="links"><a href="index.html">← 配合表トップへ</a> ・ <a href="index.html#maou-breeding">魔王・ボス配合の条件</a></p>
+  <div class="controls">
+    <input type="search" id="searchInput" placeholder="カテゴリ名で絞り込み">
+  </div>
+  <div class="wiki-grid" id="wikiGrid"></div>
+
+  <script id="page-data" type="application/json">{"counts":{"monsters":876,"bosses":115,"guide":667,"jobs":26,"structures":146,"biomes":16,"fishing":107,"gambitPresets":7,"smithing":422,"items":1209,"spells":98,"statCalculator":883,"petSkills":299,"dungeonWeapons":200,"defenseRanks":13,"companions":7},"generatedAt":"2026/10/16 21:00:59(攻略情報: DQMVI 1.00.61)"}</script>
+  <script>
+  (function () {
+    var data = JSON.parse(document.getElementById('page-data').textContent);
+    document.getElementById('updated').textContent = '最終更新: ' + data.generatedAt;
+    
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+      });
+    }
+    function expandHashDetails() {
+      if (!location.hash) return;
+      var target = document.querySelector(location.hash);
+      if (target && target.tagName === 'DETAILS') {
+        target.open = true;
+        target.scrollIntoView();
+      }
+    }
+
+
+    var CARDS = [
+      { href: 'monsters.html', icon: '📖', title: 'モンスター図鑑', desc: '全モンスターのステータス・弱点・覚える呪文', count: data.counts.monsters, unit: '体' },
+      { href: 'bosses.html', icon: '⚔️', title: 'ボス攻略', desc: '行動パターン・フェーズ切替(ネタバレ注意)', count: data.counts.bosses, unit: '体' },
+      { href: 'guide.html', icon: '🧭', title: '冒険ガイド', desc: 'ゲーム内チュートリアルの全項目', count: data.counts.guide, unit: '項目' },
+      { href: 'jobs.html', icon: '🎓', title: '職業スキル', desc: '職業ごとのスキル・武器/ステータスランク', count: data.counts.jobs, unit: '職業' },
+      { href: 'structures.html', icon: '🏛️', title: '建築物カタログ', desc: '施設・ダンジョンのサイズとNPC数', count: data.counts.structures, unit: '件' },
+      { href: 'biomes.html', icon: '🗺️', title: 'バイオーム図鑑', desc: 'バイオームの種類と、探索が進むほど上がるバイオームランク', count: data.counts.biomes, unit: '種' },
+      { href: 'fishing.html', icon: '🎣', title: '釣り交換所', desc: '釣った魚と交換できるアイテム一覧', count: data.counts.fishing, unit: '件' },
+      { href: 'gambits.html', icon: '⚙️', title: 'ガンビット解説', desc: 'ペットの行動自動化ルールとプリセット', count: data.counts.gambitPresets, unit: 'プリセット' },
+      { href: 'smithing.html', icon: '🔨', title: '鍛冶レシピ', desc: '装備・アイテムの鍛冶レシピ全一覧', count: data.counts.smithing, unit: '件' },
+      { href: 'items.html', icon: '🔍', title: 'アイテム検索', desc: 'ほしいアイテムがどこで手に入るか調べる', count: data.counts.items, unit: '件' },
+      { href: 'spells.html', icon: '📜', title: '呪文一覧', desc: '呪文を覚えるモンスター・職業を逆引き、未実装呪文も区別', count: data.counts.spells, unit: '種' },
+      { href: 'stat-calculator.html', icon: '🧮', title: 'ステータス計算機', desc: '配合結果・レベルアップ後のステータスを計算', count: data.counts.statCalculator, unit: '体対応' },
+      { href: 'pet-skills.html', icon: '📕', title: 'ペットの特技', desc: '特技の書で覚える特技の一覧と入手方法', count: data.counts.petSkills, unit: '種' },
+      { href: 'defense.html', icon: '🚩', title: '防衛戦', desc: '旗の守り方・ウェーブ・お題とごほうび・防衛設備', count: data.counts.defenseRanks, unit: 'ランク' },
+      { href: 'dungeon-weapons.html', icon: '🗡️', title: 'ダンジョン限定武器', desc: 'ダンジョンの宝箱だけで手に入る特殊効果つき武器', count: data.counts.dungeonWeapons, unit: '本' },
+      { href: 'companions.html', icon: '🍺', title: 'ルイーダの酒場', desc: '人間の仲間の雇い方・能力・覚える技', count: data.counts.companions, unit: '人' },
+    ];
+
+    function render() {
+      var query = document.getElementById('searchInput').value.trim().toLowerCase();
+      var html = CARDS.filter(function (c) {
+        return !query || c.title.toLowerCase().indexOf(query) !== -1 || c.desc.toLowerCase().indexOf(query) !== -1;
+      }).map(function (c) {
+        return '<a class="wiki-card" href="' + c.href + '">' +
+          '<div class="wiki-card-icon">' + c.icon + '</div>' +
+          '<h3>' + escapeHtml(c.title) + '</h3>' +
+          '<p>' + escapeHtml(c.desc) + '</p>' +
+          '<span class="badge">全' + c.count + c.unit + '</span></a>';
+      }).join('');
+      document.getElementById('wikiGrid').innerHTML = html || '<div class="empty">該当するカテゴリがありません</div>';
+    }
+
+    document.getElementById('searchInput').addEventListener('input', render);
+    render();
+  })();
+  </script>
+</body>
+</html>

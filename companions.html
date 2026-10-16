@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ルイーダの酒場(人間の仲間) - DQMⅥ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Outfit:wght@200;300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#070912; --ink:#eceffa; --muted:#8d95b2;
+    --gold:#e3c07d; --gold-lt:#f7e3b8; --violet:#6b5cff; --cyan:#49d8d0;
+    --line:rgba(255,255,255,.10); --surface:rgba(255,255,255,.035);
+  }
+  * { box-sizing: border-box; }
+  body { font-family: 'Zen Kaku Gothic New', 'Outfit', system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 900px; margin: 0 auto; padding: 20px 16px 48px; background:var(--bg); color:var(--ink); }
+  h1 { font-size: 20px; margin-bottom: 4px; font-weight:700; }
+  a { color: var(--gold-lt); }
+  .updated { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+  .links { font-size: 13px; margin-bottom: 16px; color: var(--muted); }
+  .links a { color: var(--gold); text-decoration:none; }
+  .links a:hover { color: var(--gold-lt); text-decoration:underline; }
+  summary.section-toggle { cursor:pointer; font-size:15px; font-weight:700; margin:16px 0 10px; color: var(--ink); }
+  .notice { background:rgba(227,192,125,.08); border:1px solid rgba(227,192,125,.35); border-radius:12px; padding:10px 14px; font-size:13px; margin-bottom:16px; color: var(--ink); }
+  .tab-buttons { display:flex; gap:6px; overflow-x:auto; margin-bottom:16px; padding-bottom:4px; }
+  .tab-btn { flex-shrink:0; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer; font-size:13px; font-family:inherit; }
+  .tab-btn.active { background:var(--gold); border-color:var(--gold); color:#1a1506; font-weight:700; }
+  .controls { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; align-items:center; }
+  input[type=search] { padding:7px 12px; border:1px solid var(--line); border-radius:10px; font-size:13px; min-width:220px; font-family:inherit; background:var(--surface); color:var(--ink); }
+  input[type=search]::placeholder { color: var(--muted); }
+  input[type=search]:focus { outline:none; border-color:var(--gold); }
+  .badge { display:inline-flex; padding:2px 9px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid var(--gold); color:var(--gold-lt); }
+  .empty { color: var(--muted); }
+  .entry { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:10px 14px; margin-bottom:8px; }
+  .entry summary { cursor:pointer; font-size:14px; color:var(--ink); }
+  .entry-stats { font-size:13px; color:var(--muted); margin-top:8px; line-height:1.7; }
+  .boss-rotation { font-size:13px; margin:6px 0 0; padding-left:20px; }
+  .boss-rotation li { margin-bottom:2px; }
+  .guide-section { margin-bottom:18px; }
+  .guide-section h2 { font-size:15px; margin:0 0 8px; color:var(--ink); }
+  .guide-section h3 { font-size:13px; color:var(--muted); margin:12px 0 6px; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 500; }
+</style>
+</head>
+<body>
+  <h1>ルイーダの酒場(人間の仲間・全7人)</h1>
+  <p class="updated" id="updated">最終更新: 2026/10/16 21:00:59(攻略情報: DQMVI 1.00.61)</p>
+  <p class="links"><a href="index.html">配合表トップ</a> ＞ <a href="wiki.html">攻略Wiki</a> ＞ ルイーダの酒場</p>
+  <div class="notice">
+    <ul>
+      <li>ルイーダに話しかけると、人間の仲間を雇えます。<strong>雇用は無料</strong>で、同じ人物は1人までです。</li>
+      <li>別れて酒場に戻しても、レベル・職業・能力・装備はそのまま保存されます。戦闘不能になると酒場に帰ります。</li>
+      <li>仲間の転職・サブ職業の変更は、ダーマ神官の近くで行えます。</li>
+      <li><strong>単独転生</strong>: いまの職業がLv300になると、ルイーダのところでその職業だけ転生できます(1つの職業につき最大10回)。ほかの職業のLvは変わりません。</li>
+      <li>人間の仲間はモンスター配合・転生の杖には使えません。</li>
+    </ul>
+    <p class="monster-list">仲間の一覧・能力・習得技はMODから自動生成。ルールはDQMVI-0.32.69で確認(DqmvRuidaMenu / DqmvHumanCompanionData)。</p>
+  </div>
+  <div class="entry"><h2>アンルシア</h2>
+      <p><strong>雇用条件</strong>: はじめから紹介してもらえます。(酒場ランク: 条件なし)</p>
+      <p><strong>はじめの職業</strong>: 勇者 / <strong>はじめから使える</strong>: ライデイン・ホイミ・ホーリーラッシュ</p>
+      <p><strong>能力の基準値</strong>: HP42 MP24 攻撃5 魔力4 守備5 魔守備4</p>
+      <h3>固有の呪文(覚えるレベル)</h3><ul><li>Lv1 ホイミ</li><li>Lv1 ライデイン</li><li>Lv45 べホイミ</li><li>Lv120 ギガデイン</li><li>Lv220 ベホマ</li><li>Lv300 ミナデイン</li></ul>
+      <h3>固有の特技(覚えるレベル)</h3><ul><li>Lv1 ホーリーラッシュ</li><li>Lv80 ドラゴンソウル</li><li>Lv170 ギガクロスブレイク</li></ul>
+    </div><div class="entry"><h2>魔勇者アンルシア</h2>
+      <p><strong>雇用条件</strong>: 「魔勇者アンルシアのコイン」を使って闘技場で本人を倒すと、酒場で紹介してもらえるようになります。(酒場ランク: 条件なし)</p>
+      <p><strong>はじめの職業</strong>: 勇者 / <strong>はじめから使える</strong>: ドルマ・バイキルト・ダークマッシャー</p>
+      <p><strong>能力の基準値</strong>: HP36 MP28 攻撃6 魔力5 守備4 魔守備3</p>
+      <h3>固有の呪文(覚えるレベル)</h3><ul><li>Lv1 ドルマ</li><li>Lv1 バイキルト</li><li>Lv45 ドルクマ</li><li>Lv120 ドルモーア</li><li>Lv220 ドルマドン</li></ul>
+      <h3>固有の特技(覚えるレベル)</h3><ul><li>Lv1 ダークマッシャー</li><li>Lv80 呪いの紋章</li><li>Lv170 やみのはどう</li><li>Lv300 冥王のかま</li></ul>
+    </div><div class="entry"><h2>イルーシャ</h2>
+      <p><strong>雇用条件</strong>: はじめから紹介してもらえます。(酒場ランク: 条件なし)</p>
+      <p><strong>はじめの職業</strong>: 賢者 / <strong>はじめから使える</strong>: ホイミ</p>
+      <p><strong>能力の基準値</strong>: HP32 MP44 攻撃3 魔力5 守備3 魔守備5</p>
+      <h3>固有の呪文(覚えるレベル)</h3><ul><li>Lv1 ホイミ</li><li>Lv35 イオラ</li><li>Lv45 べホイミ</li><li>Lv80 ザオラル</li><li>Lv120 バイキルト</li><li>Lv170 ベホマラー</li><li>Lv220 ザオリク</li><li>Lv300 ベホマズン</li></ul>
+      <h3>固有の特技(覚えるレベル)</h3><ul><li>Lv100 祝福の杖</li><li>Lv180 天使の歌声</li><li>Lv240 光のはどう</li></ul>
+    </div><div class="entry"><h2>セラフィ</h2>
+      <p><strong>雇用条件</strong>: はじめから紹介してもらえます。(酒場ランク: 条件なし)</p>
+      <p><strong>はじめの職業</strong>: 僧侶 / <strong>はじめから使える</strong>: ホイミ・スカラ</p>
+      <p><strong>能力の基準値</strong>: HP28 MP48 攻撃2 魔力5 守備3 魔守備5</p>
+      <h3>固有の呪文(覚えるレベル)</h3><ul><li>Lv1 ホイミ</li><li>Lv1 スカラ</li><li>Lv45 べホイミ</li><li>Lv60 キアリー</li><li>Lv90 ザオラル</li><li>Lv120 スクルト</li><li>Lv150 ベホイム</li><li>Lv190 ベホマラー</li><li>Lv220 フバーハ</li><li>Lv250 ザオリク</li><li>Lv300 ベホマズン</li></ul>
+      <h3>固有の特技(覚えるレベル)</h3><ul><li>Lv35 まぶしい光</li><li>Lv60 祝福の杖</li><li>Lv150 天使の歌声</li><li>Lv200 光のはどう</li></ul>
+    </div><div class="entry"><h2>ビアンカ</h2>
+      <p><strong>雇用条件</strong>: はじめから紹介してもらえます。(酒場ランク: 条件なし)</p>
+      <p><strong>はじめの職業</strong>: 魔法使い / <strong>はじめから使える</strong>: メラ</p>
+      <p><strong>能力の基準値</strong>: HP24 MP42 攻撃3 魔力5 守備3 魔守備4</p>
+      <h3>固有の呪文(覚えるレベル)</h3><ul><li>Lv1 メラ</li><li>Lv30 ラリホー</li><li>Lv60 マヌーサ</li><li>Lv90 メラミ</li><li>Lv120 バイキルト</li><li>Lv170 ベギラゴン</li><li>Lv220 メラゾーマ</li><li>Lv250 マホカンタ</li></ul>
+      <h3>固有の特技(覚えるレベル)</h3><ul><li>なし</li></ul>
+    </div><div class="entry"><h2>フローラ</h2>
+      <p><strong>雇用条件</strong>: はじめから紹介してもらえます。(酒場ランク: 条件なし)</p>
+      <p><strong>はじめの職業</strong>: 魔法使い / <strong>はじめから使える</strong>: イオ</p>
+      <p><strong>能力の基準値</strong>: HP20 MP55 攻撃2 魔力6 守備2 魔守備5</p>
+      <h3>固有の呪文(覚えるレベル)</h3><ul><li>Lv1 イオ</li><li>Lv45 べホイミ</li><li>Lv90 イオラ</li><li>Lv120 バイキルト</li><li>Lv160 ラリホー</li><li>Lv200 イオナズン</li><li>Lv220 メラゾーマ</li><li>Lv250 マホカンタ</li></ul>
+      <h3>固有の特技(覚えるレベル)</h3><ul><li>なし</li></ul>
+    </div><div class="entry"><h2>テリー</h2>
+      <p><strong>雇用条件</strong>: はじめから紹介してもらえます。(酒場ランク: 条件なし)</p>
+      <p><strong>はじめの職業</strong>: 勇者 / <strong>はじめから使える</strong>: しっぷう突き・いなずま斬り</p>
+      <p><strong>能力の基準値</strong>: HP40 MP16 攻撃7 魔力2 守備4 魔守備3</p>
+      <h3>固有の呪文(覚えるレベル)</h3><ul><li>Lv60 ライデイン</li><li>Lv200 ギガデイン</li></ul>
+      <h3>固有の特技(覚えるレベル)</h3><ul><li>Lv1 しっぷう突き</li><li>Lv1 いなずま斬り</li><li>Lv80 さみだれぎり</li><li>Lv120 雷神斬り</li><li>Lv170 雷光一閃突き</li></ul>
+    </div>
+</body>
+</html>

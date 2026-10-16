@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ガンビット解説 - DQMⅥ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Outfit:wght@200;300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#070912; --ink:#eceffa; --muted:#8d95b2;
+    --gold:#e3c07d; --gold-lt:#f7e3b8; --violet:#6b5cff; --cyan:#49d8d0;
+    --line:rgba(255,255,255,.10); --surface:rgba(255,255,255,.035);
+  }
+  * { box-sizing: border-box; }
+  body { font-family: 'Zen Kaku Gothic New', 'Outfit', system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 900px; margin: 0 auto; padding: 20px 16px 48px; background:var(--bg); color:var(--ink); }
+  h1 { font-size: 20px; margin-bottom: 4px; font-weight:700; }
+  a { color: var(--gold-lt); }
+  .updated { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+  .links { font-size: 13px; margin-bottom: 16px; color: var(--muted); }
+  .links a { color: var(--gold); text-decoration:none; }
+  .links a:hover { color: var(--gold-lt); text-decoration:underline; }
+  summary.section-toggle { cursor:pointer; font-size:15px; font-weight:700; margin:16px 0 10px; color: var(--ink); }
+  .notice { background:rgba(227,192,125,.08); border:1px solid rgba(227,192,125,.35); border-radius:12px; padding:10px 14px; font-size:13px; margin-bottom:16px; color: var(--ink); }
+  .tab-buttons { display:flex; gap:6px; overflow-x:auto; margin-bottom:16px; padding-bottom:4px; }
+  .tab-btn { flex-shrink:0; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer; font-size:13px; font-family:inherit; }
+  .tab-btn.active { background:var(--gold); border-color:var(--gold); color:#1a1506; font-weight:700; }
+  .controls { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; align-items:center; }
+  input[type=search] { padding:7px 12px; border:1px solid var(--line); border-radius:10px; font-size:13px; min-width:220px; font-family:inherit; background:var(--surface); color:var(--ink); }
+  input[type=search]::placeholder { color: var(--muted); }
+  input[type=search]:focus { outline:none; border-color:var(--gold); }
+  .badge { display:inline-flex; padding:2px 9px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid var(--gold); color:var(--gold-lt); }
+  .empty { color: var(--muted); }
+  .entry { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:10px 14px; margin-bottom:8px; }
+  .entry summary { cursor:pointer; font-size:14px; color:var(--ink); }
+  .entry-stats { font-size:13px; color:var(--muted); margin-top:8px; line-height:1.7; }
+  .boss-rotation { font-size:13px; margin:6px 0 0; padding-left:20px; }
+  .boss-rotation li { margin-bottom:2px; }
+  .guide-section { margin-bottom:18px; }
+  .guide-section h2 { font-size:15px; margin:0 0 8px; color:var(--ink); }
+  .guide-section h3 { font-size:13px; color:var(--muted); margin:12px 0 6px; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 500; }
+
+  .table-wrap { margin-top:6px; }
+  th { white-space:nowrap; }
+</style>
+</head>
+<body>
+  <h1>ガンビット解説</h1>
+  <p class="updated" id="updated"></p>
+  <p class="links"><a href="index.html">配合表トップ</a> ＞ <a href="wiki.html">攻略Wiki</a> ＞ ガンビット解説</p>
+  <p class="notice">ガンビットはペットの戦闘中の行動を自動化する設定です。「対象」「条件1」「条件2」「行動」を1枚のルールとして複数組み合わせ、上から順に条件に合うものが実行されます。組むのが大変な場合はプリセットを使うと手早く設定できます。</p>
+  <div class="guide-section">
+    <h2>プリセット一覧</h2>
+    <div id="presetsContent"></div>
+  </div>
+  <div class="guide-section">
+    <h2>選択肢一覧</h2>
+    <div class="tab-buttons" id="typeTabs"></div>
+    <div id="typeContent"></div>
+  </div>
+
+  <script id="page-data" type="application/json">{"byType":{"target":[{"id":"foe","name":"敵(全て)","kind":"","note":"戦っている相手。条件に合う敵が対象になる"},{"id":"ally","name":"味方","kind":"","note":"同じ飼い主の他のペット"},{"id":"owner","name":"主","kind":"","note":"飼い主のプレイヤー"},{"id":"self","name":"自分","kind":"","note":"そのペット自身"},{"id":"dir_north","name":"北","kind":"","note":"階段掘りの向き。北へ掘る"},{"id":"dir_south","name":"南","kind":"","note":"階段掘りの向き。南へ掘る"},{"id":"dir_east","name":"東","kind":"","note":"階段掘りの向き。東へ掘る"},{"id":"dir_west","name":"西","kind":"","note":"階段掘りの向き。西へ掘る"},{"id":"party","name":"パーティ","kind":"","note":"同じパーティの他のプレイヤー"},{"id":"ally_all","name":"味方(全て)","kind":"","note":"主・パーティの仲間・仲間のペットをまとめて対象にする"},{"id":"foe_dungeon_boss","name":"ダンジョンボス系の敵","kind":"","note":""},{"id":"foe_normal","name":"雑魚系の敵","kind":"","note":""},{"id":"foe_sparkling","name":"きらきら白の敵","kind":"","note":""},{"id":"foe_nushi","name":"きらきら赤の敵","kind":"","note":""},{"id":"is_metal","name":"メタル系の敵","kind":"","note":"メタルスライムなどの種族"},{"id":"is_boss","name":"魔王系の敵","kind":"","note":"ボス級の相手"},{"id":"foe_fly","name":"飛行系の敵","kind":"","note":""},{"id":"foe_ground","name":"地上系の敵","kind":"","note":""},{"id":"foe_sea","name":"海中系の敵","kind":"","note":""},{"id":"foe_slime","name":"スライム系の敵","kind":"","note":""},{"id":"foe_devil","name":"悪魔系の敵","kind":"","note":""},{"id":"foe_material","name":"物質系の敵","kind":"","note":""},{"id":"foe_dragon","name":"ドラゴン系の敵","kind":"","note":""},{"id":"foe_nature","name":"自然系の敵","kind":"","note":""},{"id":"foe_zombie","name":"ゾンビ系の敵","kind":"","note":""},{"id":"foe_beast","name":"魔獣系の敵","kind":"","note":""},{"id":"foe_special","name":"特殊系の敵","kind":"","note":""},{"id":"pet","name":"ペット","kind":"","note":""},{"id":"block_wood","name":"木材","kind":"","note":"周囲の原木をさがす(壊す用)"},{"id":"block_stone","name":"石材","kind":"","note":"周囲の石をさがす(壊す用)"},{"id":"block_dirt","name":"土","kind":"","note":"周囲の土をさがす(壊す用)"},{"id":"block_grass","name":"草ブロック","kind":"","note":"周囲の草ブロックをさがす(壊す用)"},{"id":"block_sand","name":"砂","kind":"","note":"周囲の砂をさがす(壊す用)"},{"id":"block_gravel","name":"砂利","kind":"","note":"周囲の砂利をさがす(壊す用)"},{"id":"block_ore","name":"鉱石","kind":"","note":"周囲の鉱石をさがす(壊す用)"},{"id":"block_crop","name":"育った作物","kind":"","note":"育ちきった作物をさがす(壊す用)"},{"id":"block_chest","name":"宝箱","kind":"","note":"周囲の宝箱をさがす(開けて片付ける用)"},{"id":"drop_item","name":"ドロップアイテム","kind":"","note":"落ちているアイテムをさがす(回収用)"}],"cond1":[{"id":"always","name":"常に","kind":"なし","note":"いつでも当てはまる。一番下に置く受け皿"},{"id":"hp","name":"HP","kind":"percent","note":"残りHPの割合を見る"},{"id":"mp","name":"MP","kind":"percent","note":"残りMPの割合を見る"},{"id":"self_mp","name":"自分のMP割合","kind":"percent","note":"自分の残りMPの割合を見る。行動は対象に行う"},{"id":"distance","name":"距離","kind":"range","note":"自分からの距離を見る"},{"id":"count","name":"数","kind":"count","note":"条件に合う相手が何体いるか"},{"id":"knocked","name":"気絶している","kind":"なし","note":"倒れている(ザオで起こせる)"},{"id":"poisoned","name":"毒","kind":"なし","note":"毒状態"},{"id":"asleep","name":"眠り","kind":"なし","note":"眠り状態"},{"id":"confused","name":"混乱","kind":"なし","note":"混乱状態"},{"id":"sealed","name":"呪文封じ","kind":"なし","note":"マホトーンを受けている"},{"id":"attacked_me","name":"自分を攻撃した","kind":"なし","note":"自分を狙ってきた相手"},{"id":"attacked_owner","name":"飼い主を攻撃した","kind":"なし","note":"飼い主を狙ってきた相手"},{"id":"hp_highest","name":"HPが一番多い","kind":"なし","note":"その中で一番HPが多い相手"},{"id":"hp_lowest","name":"HPが一番少ない","kind":"なし","note":"その中で一番HPが少ない相手"},{"id":"is_night","name":"夜","kind":"なし","note":"時間帯(対象は見ない)"},{"id":"is_day","name":"昼","kind":"なし","note":"時間帯(対象は見ない)"},{"id":"within5","name":"周囲5マス以内","kind":"なし","note":""},{"id":"within10","name":"周囲10マス以内","kind":"なし","note":""},{"id":"within20","name":"周囲20マス以内","kind":"なし","note":""},{"id":"within30","name":"周囲30マス以内","kind":"なし","note":""},{"id":"targets_me","name":"自分を狙う","kind":"なし","note":""},{"id":"targets_pet","name":"ペットを狙う","kind":"なし","note":""},{"id":"targets_ally","name":"味方を狙う","kind":"なし","note":""},{"id":"nearest","name":"最も近い","kind":"なし","note":""},{"id":"farthest","name":"最も遠い","kind":"なし","note":""},{"id":"attack","name":"攻撃力","kind":"compare","note":""},{"id":"defense","name":"守備力","kind":"compare","note":""},{"id":"magic","name":"魔力","kind":"compare","note":""},{"id":"magic_defense","name":"魔守備力","kind":"compare","note":""},{"id":"fire","name":"火に","kind":"resist","note":""},{"id":"ice","name":"水に","kind":"resist","note":""},{"id":"wind","name":"風に","kind":"resist","note":""},{"id":"explosion","name":"爆発に","kind":"resist","note":""},{"id":"no_weakness","name":"弱点なし","kind":"","note":"属性の弱点を持たない相手"},{"id":"height","name":"高さ","kind":"height","note":"飼い主の足元を基準に高さを見る(整地用)"}],"cond2":[{"id":"le_percent10","name":"10%以下","kind":"percent","note":"percent"},{"id":"le_percent20","name":"20%以下","kind":"percent","note":"percent"},{"id":"le_percent30","name":"30%以下","kind":"percent","note":"percent"},{"id":"le_percent40","name":"40%以下","kind":"percent","note":"percent"},{"id":"le_percent50","name":"50%以下","kind":"percent","note":"percent"},{"id":"le_percent60","name":"60%以下","kind":"percent","note":"percent"},{"id":"le_percent70","name":"70%以下","kind":"percent","note":"percent"},{"id":"le_percent80","name":"80%以下","kind":"percent","note":"percent"},{"id":"le_percent90","name":"90%以下","kind":"percent","note":"percent"},{"id":"ge_percent10","name":"10%以上","kind":"percent","note":"percent"},{"id":"ge_percent20","name":"20%以上","kind":"percent","note":"percent"},{"id":"ge_percent30","name":"30%以上","kind":"percent","note":"percent"},{"id":"ge_percent40","name":"40%以上","kind":"percent","note":"percent"},{"id":"ge_percent50","name":"50%以上","kind":"percent","note":"percent"},{"id":"ge_percent60","name":"60%以上","kind":"percent","note":"percent"},{"id":"ge_percent70","name":"70%以上","kind":"percent","note":"percent"},{"id":"ge_percent80","name":"80%以上","kind":"percent","note":"percent"},{"id":"ge_percent90","name":"90%以上","kind":"percent","note":"percent"},{"id":"within3","name":"3マス以内","kind":"range","note":"range"},{"id":"within5","name":"5マス以内","kind":"range","note":"range"},{"id":"within10","name":"10マス以内","kind":"range","note":"range"},{"id":"within20","name":"20マス以内","kind":"range","note":"range"},{"id":"within30","name":"30マス以内","kind":"range","note":"range"},{"id":"beyond3","name":"3マス以上はなれている","kind":"range","note":"range"},{"id":"beyond5","name":"5マス以上はなれている","kind":"range","note":"range"},{"id":"beyond10","name":"10マス以上はなれている","kind":"range","note":"range"},{"id":"beyond20","name":"20マス以上はなれている","kind":"range","note":"range"},{"id":"beyond30","name":"30マス以上はなれている","kind":"range","note":"range"},{"id":"ge_count2","name":"2体以上","kind":"count","note":"count"},{"id":"ge_count3","name":"3体以上","kind":"count","note":"count"},{"id":"ge_count5","name":"5体以上","kind":"count","note":"count"},{"id":"le_count2","name":"2体以下","kind":"count","note":"count"},{"id":"le_count3","name":"3体以下","kind":"count","note":"count"},{"id":"le_count5","name":"5体以下","kind":"count","note":"count"},{"id":"highest","name":"最も高い","kind":"compare","note":"compare"},{"id":"lowest","name":"最も低い","kind":"compare","note":"compare"},{"id":"weak","name":"弱い","kind":"resist","note":"resist"},{"id":"strong","name":"強い","kind":"resist","note":"resist"},{"id":"ge_player_height","name":"プレイヤーの高さ以上","kind":"height","note":"height"}],"action":[{"id":"attack","name":"たたかう","kind":"","note":"通常攻撃で殴る"},{"id":"magic_strongest","name":"一番強い攻撃呪文","kind":"","note":"覚えている中で一番強い攻撃呪文"},{"id":"magic_cheapest","name":"一番安い攻撃呪文","kind":"","note":"MPを節約して攻める"},{"id":"magic_specific","name":"指定した呪文","kind":"呪文","note":"覚えている呪文から1つ選ぶ"},{"id":"skill_specific","name":"指定した特技","kind":"特技","note":"特技の書で覚えた特技から1つ選ぶ"},{"id":"magic_area","name":"範囲攻撃の呪文","kind":"","note":"複数の敵をまとめて狙う"},{"id":"heal","name":"回復する","kind":"","note":"対象にホイミ系"},{"id":"heal_area","name":"まとめて回復する","kind":"","note":"ホイマラー系"},{"id":"revive","name":"生き返らせる","kind":"","note":"ザオ系で気絶した相手を起こす"},{"id":"cure_status","name":"状態異常を治す","kind":"","note":"キアリー・マホリー・ザメハ"},{"id":"buff_attack","name":"攻撃を上げる","kind":"","note":"バイキルト系"},{"id":"buff_defense","name":"守備を上げる","kind":"","note":"スカラ・スクルト系"},{"id":"buff_speed","name":"素早さを上げる","kind":"","note":"ピオラ・ピオリム系"},{"id":"buff_resist","name":"呪文耐性を上げる","kind":"","note":"マホカンタ・フバーハ系"},{"id":"debuff_attack","name":"攻撃を下げる","kind":"","note":"ヘナトス系"},{"id":"debuff_defense","name":"守備を下げる","kind":"","note":"ルカニ系"},{"id":"debuff_sleep","name":"眠らせる","kind":"","note":"ラリホー系"},{"id":"debuff_confuse","name":"混乱させる","kind":"","note":"メダパニ系"},{"id":"debuff_seal","name":"呪文を封じる","kind":"","note":"マホトーン系"},{"id":"debuff_blind","name":"目つぶしをする","kind":"","note":"マヌーサ系"},{"id":"debuff_slow","name":"素早さを下げる","kind":"","note":"ボミエ系"},{"id":"heal_regen","name":"継続回復をかける","kind":"","note":"リホイミ系。少しずつ回復し続ける"},{"id":"guard","name":"かばう","kind":"","note":"対象の前に出て攻撃を受ける"},{"id":"keep_distance","name":"距離をとる","kind":"","note":"近づかれたら離れる"},{"id":"flee","name":"逃げる","kind":"","note":"戦わずに離脱する"},{"id":"wait","name":"待機する","kind":"","note":"その場から動かない"},{"id":"follow_owner","name":"追従","kind":"","note":"飼い主のそばへ戻る"},{"id":"intercept","name":"迎撃","kind":"","note":"近づいてきた敵と飼い主を狙う敵だけ叩く"},{"id":"break_block","name":"壊す","kind":"","note":"対象のブロックを壊す(木材・石材・土・砂・砂利・鉱石・作物)"},{"id":"collect","name":"回収して渡す","kind":"","note":"ドロップアイテムを拾って飼い主へ渡す"},{"id":"open_chest","name":"開けて片付ける","kind":"","note":"宝箱を開けて中身を飼い主へ渡し、空になった宝箱を壊す"},{"id":"dig_stairs_w1","name":"幅1の階段掘り","kind":"方向","note":"主人の足元から指定の方向へ、幅1・高さ3の階段を掘れなくなるまで(岩盤の手前まで)掘る。4マスごとに松明。チェスト等の中身を持つブロックとベッドは壊さない"},{"id":"dig_stairs_w2","name":"幅2の階段掘り","kind":"方向","note":"主人の足元から指定の方向へ、幅2・高さ3の階段を掘れなくなるまで(岩盤の手前まで)掘る。4マスごとに松明。チェスト等の中身を持つブロックとベッドは壊さない"},{"id":"dig_tunnel_2x1","name":"横穴掘り 幅1x高2","kind":"方向","note":"主人の位置から指定の方向へ、幅1・高さ2の横穴を掘れなくなるまで水平に掘る。6マスごとに松明。チェスト等の中身を持つブロックとベッドは壊さない"},{"id":"dig_tunnel_2x2","name":"横穴掘り 幅2x高2","kind":"方向","note":"主人の位置から指定の方向へ、幅2・高さ2の横穴を掘れなくなるまで水平に掘る。6マスごとに松明。チェスト等の中身を持つブロックとベッドは壊さない"},{"id":"dig_tunnel_3x2","name":"横穴掘り 幅3x高2","kind":"方向","note":"主人の位置から指定の方向へ、幅3・高さ2の横穴を掘れなくなるまで水平に掘る。6マスごとに松明。チェスト等の中身を持つブロックとベッドは壊さない"},{"id":"dig_tunnel_3x3","name":"横穴掘り 幅3x高3","kind":"方向","note":"主人の位置から指定の方向へ、幅3・高さ3の横穴を掘れなくなるまで水平に掘る。6マスごとに松明。チェスト等の中身を持つブロックとベッドは壊さない"}]},"presets":[{"name":"アタッカー","rules":[{"targetLabel":"自分","cond1Label":"HP","cond2Label":"30%以下","actionLabel":"回復する"},{"targetLabel":"敵(全て)","cond1Label":"HP","cond2Label":"20%以下","actionLabel":"たたかう"},{"targetLabel":"敵(全て)","cond1Label":"最も近い","cond2Label":"(なし)","actionLabel":"たたかう"}]},{"name":"まほうつかい","rules":[{"targetLabel":"自分","cond1Label":"MP","cond2Label":"20%以下","actionLabel":"たたかう"},{"targetLabel":"敵(全て)","cond1Label":"数","cond2Label":"3体以上","actionLabel":"範囲攻撃の呪文"},{"targetLabel":"敵(全て)","cond1Label":"最も近い","cond2Label":"(なし)","actionLabel":"一番強い攻撃呪文"}]},{"name":"ヒーラー","rules":[{"targetLabel":"味方","cond1Label":"気絶している","cond2Label":"(なし)","actionLabel":"生き返らせる"},{"targetLabel":"主","cond1Label":"HP","cond2Label":"50%以下","actionLabel":"回復する"},{"targetLabel":"味方","cond1Label":"HP","cond2Label":"50%以下","actionLabel":"回復する"},{"targetLabel":"自分","cond1Label":"HP","cond2Label":"40%以下","actionLabel":"回復する"},{"targetLabel":"味方","cond1Label":"毒","cond2Label":"(なし)","actionLabel":"状態異常を治す"},{"targetLabel":"主","cond1Label":"常に","cond2Label":"(なし)","actionLabel":"追従"}]},{"name":"ほじょ","rules":[{"targetLabel":"主","cond1Label":"常に","cond2Label":"(なし)","actionLabel":"攻撃を上げる"},{"targetLabel":"自分","cond1Label":"常に","cond2Label":"(なし)","actionLabel":"守備を上げる"},{"targetLabel":"敵(全て)","cond1Label":"数","cond2Label":"3体以上","actionLabel":"眠らせる"},{"targetLabel":"敵(全て)","cond1Label":"最も近い","cond2Label":"(なし)","actionLabel":"守備を下げる"},{"targetLabel":"主","cond1Label":"HP","cond2Label":"40%以下","actionLabel":"回復する"}]},{"name":"かべ","rules":[{"targetLabel":"主","cond1Label":"HP","cond2Label":"70%以下","actionLabel":"かばう"},{"targetLabel":"敵(全て)","cond1Label":"飼い主を攻撃した","cond2Label":"(なし)","actionLabel":"たたかう"},{"targetLabel":"敵(全て)","cond1Label":"自分を狙う","cond2Label":"(なし)","actionLabel":"たたかう"},{"targetLabel":"主","cond1Label":"常に","cond2Label":"(なし)","actionLabel":"迎撃"}]},{"name":"メタル狩り","rules":[{"targetLabel":"メタル系の敵","cond1Label":"常に","cond2Label":"(なし)","actionLabel":"たたかう"},{"targetLabel":"敵(全て)","cond1Label":"最も近い","cond2Label":"(なし)","actionLabel":"たたかう"}]},{"name":"ついてくるだけ","rules":[{"targetLabel":"自分","cond1Label":"HP","cond2Label":"50%以下","actionLabel":"距離をとる"},{"targetLabel":"主","cond1Label":"常に","cond2Label":"(なし)","actionLabel":"追従"}]}],"generatedAt":"2026/10/16 21:00:59(攻略情報: DQMVI 1.00.61)"}</script>
+  <script>
+  (function () {
+    var data = JSON.parse(document.getElementById('page-data').textContent);
+    document.getElementById('updated').textContent = '最終更新: ' + data.generatedAt;
+    
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+      });
+    }
+    function expandHashDetails() {
+      if (!location.hash) return;
+      var target = document.querySelector(location.hash);
+      if (target && target.tagName === 'DETAILS') {
+        target.open = true;
+        target.scrollIntoView();
+      }
+    }
+
+
+    var presetsHtml = data.presets.map(function (p) {
+      var rulesHtml = p.rules.map(function (r) {
+        return '<li>対象:' + escapeHtml(r.targetLabel) + ' / 条件1:' + escapeHtml(r.cond1Label) +
+          ' / 条件2:' + escapeHtml(r.cond2Label) + ' / 行動:' + escapeHtml(r.actionLabel) + '</li>';
+      }).join('');
+      return '<details class="entry"><summary><strong>' + escapeHtml(p.name) + '</strong></summary>' +
+        '<ol class="boss-rotation">' + rulesHtml + '</ol></details>';
+    }).join('');
+    document.getElementById('presetsContent').innerHTML = presetsHtml || '<div class="empty">プリセットがありません</div>';
+
+    var TYPE_LABELS = { target: '対象', cond1: '条件1', cond2: '条件2', action: '行動' };
+    var TYPES = ['target', 'cond1', 'cond2', 'action'];
+    var activeType = 'target';
+
+    function renderTypeTabs() {
+      document.getElementById('typeTabs').innerHTML = TYPES.map(function (t) {
+        return '<button class="tab-btn' + (t === activeType ? ' active' : '') + '" data-type="' + t + '">' + TYPE_LABELS[t] + '</button>';
+      }).join('');
+      Array.prototype.forEach.call(document.querySelectorAll('#typeTabs .tab-btn'), function (btn) {
+        btn.addEventListener('click', function () {
+          activeType = btn.dataset.type;
+          renderTypeTabs();
+          renderTypeContent();
+        });
+      });
+    }
+
+    function renderTypeContent() {
+      var items = data.byType[activeType] || [];
+      var rows = items.map(function (item) {
+        return '<tr><td>' + escapeHtml(item.name) + '</td><td>' + escapeHtml(item.kind || '-') + '</td><td>' + escapeHtml(item.note || '-') + '</td></tr>';
+      }).join('');
+      document.getElementById('typeContent').innerHTML =
+        '<div class="table-wrap"><table><thead><tr><th>名前</th><th>種類</th><th>説明</th></tr></thead><tbody>' +
+        (rows || '<tr><td colspan="3" class="empty">該当する項目がありません</td></tr>') + '</tbody></table></div>';
+    }
+
+    renderTypeTabs();
+    renderTypeContent();
+  })();
+  </script>
+</body>
+</html>
